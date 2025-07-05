@@ -180,7 +180,8 @@ class PaymentsRelationManager extends RelationManager
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\Action::make('refund'),
+                Tables\Actions\Action::make('refund')
+                    ->hidden(fn() => $this->getOwnerRecord()->status == 'verified'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

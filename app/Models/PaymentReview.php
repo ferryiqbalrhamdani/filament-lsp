@@ -16,4 +16,9 @@ class PaymentReview extends Model
     {
         return $this->belongsTo(Payment::class);
     }
+
+    public function aplOne()
+    {
+        return $this->hasOne(AplOne::class);
+    }
 }

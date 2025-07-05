@@ -108,7 +108,7 @@ class PaymentReviewResource extends Resource
                                             );
                                         }
 
-                                        return 'Tidak ada bukti pembayaran.';
+                                        return;
                                     }),
 
                             ]),

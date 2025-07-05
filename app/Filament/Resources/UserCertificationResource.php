@@ -67,10 +67,11 @@ class UserCertificationResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('certificationList.assessmentSchedule.certificationScheme.judul_skema')
-                    ->words(7)
+                    ->words(6)
                     ->label('Skema Sertifikasi')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
+                    ->label('Status Pembayaran')
                     ->badge()
                     ->color(fn(string $state): string => match (strtolower($state)) {
                         // 'processing' => 'warning',
@@ -80,6 +81,7 @@ class UserCertificationResource extends Resource
                     })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('payment.paymentMethod.name')
+                    ->label('Metode Pembayaran')
                     ->badge()
                     ->default('-')
                     ->searchable(),
