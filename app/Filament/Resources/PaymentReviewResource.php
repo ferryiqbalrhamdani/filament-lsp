@@ -55,6 +55,9 @@ class PaymentReviewResource extends Resource
                                     ->content(fn(PaymentReview $record): string => $record->payment->digital_payment ?? '-'),
                                 Forms\Components\Placeholder::make('Nomor Rekening')
                                     ->content(fn(PaymentReview $record): string => $record->payment->digital_payment_nomor ?? '-'),
+                                Forms\Components\Placeholder::make('Catatan')
+                                    ->content(fn(PaymentReview $record): string => $record->payment->keterangan ?? '-')
+                                    ->columnSpanFull(),
 
 
                                 Forms\Components\Placeholder::make('Jumlah Pembayaran')

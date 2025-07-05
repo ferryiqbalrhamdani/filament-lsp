@@ -42,6 +42,12 @@ class UserResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->visibleOn('create'),
+                Forms\Components\Select::make('roles')
+                    ->required()
+                    ->multiple()
+                    ->relationship('roles', 'name')
+                    ->preload()
+                    ->searchable(),
 
             ]);
     }

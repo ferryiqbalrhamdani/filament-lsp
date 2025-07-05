@@ -75,7 +75,7 @@ class AdminPanelProvider extends PanelProvider
                     ->shouldShowAvatarForm(
                         directory: 'avatars',
                     ),
-
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
             ]);
     }
 }
