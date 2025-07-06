@@ -20,14 +20,14 @@ class CertificationList extends Model
     }
 
     // Pada model CertificationList
-    public function userCertifications()
+    public function userCertification()
     {
-        return $this->hasMany(UserCertification::class);
+        return $this->hasOne(UserCertification::class);
     }
 
     public function getUserCertification($userId)
     {
-        return $this->userCertifications()->where('user_id', $userId)->first();
+        return $this->userCertification()->where('user_id', $userId)->first();
     }
 
     public function getDocumentProgress($userId)

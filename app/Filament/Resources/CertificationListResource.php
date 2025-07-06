@@ -82,7 +82,7 @@ class CertificationListResource extends Resource
                 Tables\Columns\TextColumn::make('user_status')
                     ->label('Status Anda')
                     ->state(function ($record) {
-                        $userCert = $record->userCertifications()
+                        $userCert = $record->userCertification()
                             ->where('user_id', Auth::user()->id)
                             ->first();
 
@@ -105,38 +105,52 @@ class CertificationListResource extends Resource
                         thousandsSeparator: '.',
                     )
                     ->getStateUsing(function ($record) {
-                        return $record->userCertifications()->count();
+                        return $record->userCertification()->count();
                     }),
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([
                 Tables\Actions\ViewAction::make()
                     ->slideOver()
-                    ->modalWidth(MaxWidth::Screen),
+                    ->modalWidth(MaxWidth::SevenExtraLarge),
                 Tables\Actions\Action::make('register')
                     ->label('Daftar')
                     ->requiresConfirmation()
                     ->visible(function ($record) {
-                        return !$record->userCertifications()
+                        return !$record->userCertification()
                             ->where('user_id', Auth::user()->id)
                             ->exists();
                     })
                     ->action(function ($record) {
-                        $record->userCertifications()->create([
-                            'user_id' => Auth::user()->id,
-                            'status' => 'pending'
+                        $user = Auth::user();
+
+                        // Buat userCertification
+                        $userCertification = $record->userCertification()->create([
+                            'user_id' => $user->id,
+                            'status' => 'pending',
                         ]);
 
+                        // Ambil semua dokumen yang wajib dari skema sertifikasi
+                        $documentTypes = $record->assessmentSchedule->certificationScheme->documentTypes ?? collect();
 
+                        // Buat entri kosong untuk tiap documentType
+                        foreach ($documentTypes as $docType) {
+                            $userCertification->documents()->create([
+                                'document_type_id' => $docType->id,
+                                // file_path akan diisi nanti setelah user upload
+                            ]);
+                        }
+
+                        // Kirim notifikasi
                         Notification::make()
                             ->success()
                             ->title('Pendaftaran Berhasil')
-                            ->body('Silahkan klik tombol "Lihat Pendaftaran Saya" untuk melihat detail pendaftaran Anda.')
+                            ->body('Silahkan klik tombol "Lihat Pendaftaran Saya" untuk mengunggah dokumen.')
                             ->persistent()
                             ->actions([
                                 Action::make('lihat Pendaftaran Saya')
                                     ->button()
-                                    ->url(UserCertificationResource::getUrl('edit', ['record' => $record->userCertifications()->where('user_id', Auth::user()->id)->first()])),
+                                    ->url(UserCertificationResource::getUrl('edit', ['record' => $userCertification])),
                             ])
                             ->send();
                     }),
@@ -145,7 +159,7 @@ class CertificationListResource extends Resource
                 Tables\Actions\Action::make('cancel_registration')
                     ->label('Batalkan')
                     ->visible(function ($record) {
-                        $userCert = $record->userCertifications()
+                        $userCert = $record->userCertification()
                             ->where('user_id', Auth::user()->id)
                             ->first();
 
@@ -155,7 +169,7 @@ class CertificationListResource extends Resource
                     ->icon('heroicon-o-x-circle')
                     ->requiresConfirmation()
                     ->action(function ($record) {
-                        $record->userCertifications()
+                        $record->userCertification()
                             ->where('user_id', Auth::user()->id)
                             ->delete();
 
@@ -171,7 +185,7 @@ class CertificationListResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with(['assessmentSchedule.certificationScheme', 'userCertifications'])
+            ->with(['assessmentSchedule.certificationScheme', 'userCertification'])
             ->whereHas('assessmentSchedule', function ($query) {
                 $query->where('is_active', true);
             });

@@ -8,6 +8,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Get;
 
 class DocumentsRelationManager extends RelationManager
 {
@@ -17,30 +18,12 @@ class DocumentsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('document_type_id')
+                Forms\Components\Placeholder::make('document_type_id')
                     ->label('Jenis Dokumen')
-                    ->options(function () {
-                        $certificationScheme = $this->getOwnerRecord()
-                            ->certificationList
-                            ->assessmentSchedule
-                            ->certificationScheme;
-
-                        // Ambil semua document types yang tersedia
-                        $allDocumentTypes = $certificationScheme->documentTypes;
-
-                        // Ambil document_type_id yang sudah diinput
-                        $existingDocumentTypeIds = $this->getOwnerRecord()
-                            ->documents()
-                            ->pluck('document_type_id');
-
-                        // Filter hanya yang belum ada
-                        $availableDocumentTypes = $allDocumentTypes
-                            ->whereNotIn('id', $existingDocumentTypeIds);
-
-                        return $availableDocumentTypes->pluck('name', 'id');
-                    })
-                    ->required()
-                    ->searchable(),
+                    ->content(function ($state): string {
+                        $data = $this->getOwnerRecord()->certificationList->assessmentSchedule->certificationScheme->documentTypes->where('id', $state)->first();
+                        return $data->name ?? '-';
+                    }),
 
                 Forms\Components\FileUpload::make('file_path')
                     ->label('File Dokumen')
@@ -72,12 +55,13 @@ class DocumentsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->label('Upload Dokumen'),
+                // Tables\Actions\CreateAction::make()
+                //     ->label('Upload Dokumen'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make()
+                    ->label('Upload Dokumen')
                     ->visible(fn() => $this->getOwnerRecord()->status == 'pending'),
                 // Tables\Actions\DeleteAction::make(),
             ])
