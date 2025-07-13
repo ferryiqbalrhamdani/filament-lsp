@@ -22,4 +22,9 @@ class AplOne extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function aplTwo()
+    {
+        return $this->hasOne(AplTwo::class);
+    }
 }

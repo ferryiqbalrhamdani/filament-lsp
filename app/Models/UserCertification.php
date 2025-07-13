@@ -14,6 +14,11 @@ class UserCertification extends Model
         'payment_proof'
     ];
 
+    protected $casts = [
+        'custom_fields' => 'array',
+    ];
+
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -9,6 +9,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use App\Models\UserCertification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserCertificationResource\Pages;
@@ -95,7 +96,10 @@ class UserCertificationResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->url(fn($record) => UserCertificationResource::getUrl('edit', [
+                        'record' => Crypt::encrypt($record->id),
+                    ])),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

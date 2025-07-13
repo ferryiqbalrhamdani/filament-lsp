@@ -64,11 +64,15 @@ class CertificationSchemeResource extends Resource
                             ->columnSpanFull()
                             ->rows(5)
                             ->cols(5),
-                        Forms\Components\TextInput::make('tujuan_skema')
+                        Forms\Components\Select::make('tujuan_skema')
+                            ->options([
+                                'Sertifikasi' => 'Sertifikasi',
+                                'Pengakuan Kompetensi Terkini (PKT)' => 'Pengakuan Kompetensi Terkini (PKT)',
+                                'Rekognisi Pembelajaran Lampau (RPL)' => 'Rekognisi Pembelajaran Lampau (RPL)',
+                                'Lainnya' => 'Lainnya',
+                            ])
                             ->required()
-                            ->placeholder('Contoh: Untuk setifikasi profesi sebagai Junior Web Developer')
-                            ->columnSpanFull()
-                            ->maxLength(255),
+                            ->columnSpanFull(),
                         Forms\Components\TextInput::make('kode_referensi')
                             ->label('Kode Referensi / Kategori')
                             ->placeholder('Contoh: ICT/WebDev')

@@ -11,6 +11,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use App\Filament\Clusters\Sertifikasi;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
@@ -113,9 +114,9 @@ class AplOneResource extends Resource
                         Forms\Components\Radio::make('status')
                             ->required()
                             ->options([
-                                'pending' => 'Pending',
-                                'verified' => 'Verified',
-                                'failed' => 'Failed',
+                                'pending' => 'Belum diperiksa',
+                                'verified' => 'Rekomendasi',
+                                'failed' => 'Tidak disetujui',
                             ])
                             ->inline()
                             ->inlineLabel(false)
@@ -134,10 +135,10 @@ class AplOneResource extends Resource
                     ->label('Judul Skema')
                     ->words(4)
                     ->sortable(),
-                // Tables\Columns\TextColumn::make('paymentReview.payment.userCertification.user.name')
-                //     ->label('Assesi')
-                //     ->badge()
-                //     ->sortable(),
+                Tables\Columns\TextColumn::make('paymentReview.payment.userCertification.user.name')
+                    ->label('Nama Asesi')
+                    ->badge()
+                    ->sortable(),
                 // Tables\Columns\TextColumn::make('user.name')
                 //     ->label('Asesor Status')
                 //     ->badge()
@@ -154,7 +155,13 @@ class AplOneResource extends Resource
                         'failed' => 'danger',
                         default => 'warning',
                     })
-                    ->suffix(fn($record): string => $record->user ? ' oleh ' . $record->user->name : '')
+                    ->formatStateUsing(fn(string $state): string => match (strtolower($state)) {
+                        'pending' => 'Belum Diperiksa',
+                        'verified' => 'Rekomendasi',
+                        'failed' => 'Tidak Disetujui',
+                        default => ucfirst($state),
+                    })
+                    // ->suffix(fn($record): string => $record->user ? ' oleh ' . $record->user->name : '')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
@@ -171,7 +178,10 @@ class AplOneResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->url(fn($record) => AplOneResource::getUrl('edit', [
+                        'record' => Crypt::encrypt($record->id),
+                    ])),
                 Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([

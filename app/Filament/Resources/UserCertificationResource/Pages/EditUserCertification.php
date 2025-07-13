@@ -2,9 +2,12 @@
 
 namespace App\Filament\Resources\UserCertificationResource\Pages;
 
-use App\Filament\Resources\UserCertificationResource;
 use Filament\Actions;
+use App\Models\UserCertification;
+use Illuminate\Support\Facades\Crypt;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\UserCertificationResource;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class EditUserCertification extends EditRecord
 {
@@ -19,6 +22,17 @@ class EditUserCertification extends EditRecord
                 ->outlined()
                 ->url(UserCertificationResource::getUrl('index')),
         ];
+    }
+
+    protected function resolveRecord($key): UserCertification
+    {
+        try {
+            $realId = Crypt::decrypt($key);
+        } catch (DecryptException $e) {
+            abort(404);
+        }
+
+        return UserCertification::findOrFail($realId);
     }
 
     protected function getFormActions(): array
