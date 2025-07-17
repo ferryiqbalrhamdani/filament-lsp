@@ -9,3 +9,4 @@ Route::get('/', function () {
 });
 
 Route::get('/print/apl-one/{id}', [PrintController::class, 'printPdf'])->name('print.apl-one')->middleware([CheckNotAsesi::class]);
+Route::get('/print/apl-two/{id}', [PrintController::class, 'printPdfAplTwo'])->name('print.apl-two')->middleware([CheckNotAsesi::class]);

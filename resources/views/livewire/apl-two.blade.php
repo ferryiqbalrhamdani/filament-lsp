@@ -39,7 +39,7 @@
                 @foreach ($unit->elements as $elementIndex => $element)
 
                 <tr>
-                    <td colspan="5" class="border border-gray-700 px-3 py-1">
+                    <td colspan="2" class="border border-gray-700 px-3 py-1">
                         <strong>Elemen {{ $elementIndex + 1 }} {{ $element->name }}</strong><br>
                         <div><strong>&bull; Kriteria Unjuk Kerja:</strong></div>
 
@@ -48,32 +48,22 @@
 
 
                     </td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="border border-gray-700 dark:border-gray-600 px-3 py-2"></td>
-
-                    <!-- Radio B -->
-                    <td class="border border-gray-700 dark:border-gray-600 px-3 py-2 text-center">
+                    <td colspan="1" class="border border-gray-700 px-3 py-1 text-center align-middle">
                         <input type="radio" name="state[{{ $index }}][{{ $elementIndex }}][status]"
                             wire:model="state.{{ $index }}.{{ $elementIndex }}.status" value="b"
                             class="form-radio text-green-600">
                     </td>
-
-                    <!-- Radio BK -->
-                    <td class="border border-gray-700 dark:border-gray-600 px-3 py-2 text-center">
+                    <td colspan="1" class="border border-gray-700 px-3 py-1 text-center align-middle">
                         <input type="radio" name="state[{{ $index }}][{{ $elementIndex }}][status]"
                             wire:model="state.{{ $index }}.{{ $elementIndex }}.status" value="bk"
                             class="form-radio text-red-600">
                     </td>
-
-                    <!-- Bukti yang relevan -->
-                    <td class="border border-gray-700 dark:border-gray-600 px-3 py-2">
+                    <td colspan="1" class="border border-gray-700 px-3 py-1">
                         <input type="text" name="state[{{ $index }}][{{ $elementIndex }}][bukti]"
                             wire:model="state.{{ $index }}.{{ $elementIndex }}.bukti"
                             class="w-full border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm">
                     </td>
                 </tr>
-
 
                 @endforeach
             </tbody>

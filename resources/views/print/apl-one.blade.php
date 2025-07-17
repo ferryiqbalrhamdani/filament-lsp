@@ -289,6 +289,14 @@
         }
     </style>
 
+            @php
+            $units =
+            $data->paymentReview->payment->userCertification->certificationList->assessmentSchedule->certificationScheme->units
+            ?? null;
+            $jenisSkema =
+            $data->paymentReview->payment->userCertification->certificationList->assessmentSchedule->certificationScheme->jenis_skema
+            ?? '-';
+            @endphp
     <table border="1" cellpadding="5" style="width: 100%; border-collapse: collapse;">
         <thead style="background-color: #eee;">
             <tr>
@@ -299,14 +307,6 @@
             </tr>
         </thead>
         <tbody>
-            @php
-            $units =
-            $data->paymentReview->payment->userCertification->certificationList->assessmentSchedule->certificationScheme->units
-            ?? null;
-            $jenisSkema =
-            $data->paymentReview->payment->userCertification->certificationList->assessmentSchedule->certificationScheme->jenis_skema
-            ?? '-';
-            @endphp
 
             @if ($units && $units->count())
             @foreach ($units as $item)

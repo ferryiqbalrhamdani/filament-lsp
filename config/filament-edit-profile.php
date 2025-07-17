@@ -115,6 +115,22 @@ return [
             'autocomplete' => false, // optional
             'column_span' => 'md'
         ],
+        'kode_pos' => [
+            'type' => 'text', // required
+            'label' => 'Kode Pos', // required
+            'placeholder' => 'Contoh: 112233', // optional
+            'id' => 'custom-field-16', // optional
+            'required' => false, // optional
+            'rules' => [], // optional
+            'hint_icon' => '', // optional
+            'hint' => '', // optional
+            'suffix_icon' => '', // optional
+            'prefix_icon' => '', // optional
+            'default' => '', // optional
+            'column_span' => 'full', // optional
+            'autocomplete' => false, // optional
+            'column_span' => 'md'
+        ],
         'alamat' => [
             'type' => 'textarea', // required
             'label' => 'Alamat', // required

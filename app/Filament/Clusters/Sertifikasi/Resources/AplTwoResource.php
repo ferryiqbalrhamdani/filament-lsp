@@ -154,11 +154,13 @@ class AplTwoResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('apl_one_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('aplOne.paymentReview.payment.userCertification.certificationList.assessmentSchedule.certificationScheme.judul_skema')
+                    ->label('Judul Skema')
+                    ->words(4)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('aplOne.paymentReview.payment.userCertification.user.name')
+                    ->label('Nama Asesi')
+                    ->badge()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('no_reg')
                     ->searchable(),
@@ -174,6 +176,7 @@ class AplTwoResource extends Resource
             ->filters([
                 //
             ])
+            ->defaultSort('created_at', 'desc')
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->url(fn($record) => AplTwoResource::getUrl('edit', [

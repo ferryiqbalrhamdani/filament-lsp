@@ -23,8 +23,8 @@ class CheckNotAsesi
         }
 
         if ($user->hasRole('asesi')) {
-            // abort(403, 'Akses ditolak');
-            return back();
+            abort(403);
+            // return back();
         }
 
         return $next($request);

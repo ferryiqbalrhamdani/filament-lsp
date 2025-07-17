@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AplOne;
+use App\Models\AplTwo;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Crypt;
@@ -34,5 +35,23 @@ class PrintController extends Controller
         return $pdf->stream();
 
         // return view('print.apl-one', compact('id')); // contoh tampilan view
+    }
+    public function printPdfAplTwo($id)
+    {
+        try {
+            $realId = Crypt::decrypt($id);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            abort(403, 'ID tidak valid.');
+        }
+        // Ambil data sesuai kebutuhan
+        $data = AplTwo::findOrFail($realId);
+
+
+
+        // Generate PDF dari view
+        $pdf = Pdf::loadView('print.apl-two', compact('data'));
+
+        // Return sebagai download
+        return $pdf->stream();
     }
 }

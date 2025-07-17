@@ -18,6 +18,12 @@ class EditAplTwo extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
+            Actions\Action::make('print')
+                ->label('Print')
+                ->icon('heroicon-s-printer')
+                ->outlined()
+                ->url(route('print.apl-two', ['id' => Crypt::encrypt($this->getRecord()->id)]))
+                ->openUrlInNewTab()
         ];
     }
 
